@@ -1,0 +1,133 @@
+11.Create an application to send an e-mail
+Creating Layout of Send Email App
+Here, we will create a layout for our app. So, for tutorial purposes, I am keeping it simple. For sending an
+email, we usually need three fields, i.e., To, Subject, and Message. So, we will be creating a layout for three
+fields with the help of TextView and EditText and finally, we need a Send button to send the email.
+The XML code for our layout is shown below.
+activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+tools:context="in.amitsin6h.sendemail.MainActivity"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:paddingLeft="20px"
+android:paddingRight="20px"
+android:orientation="horizontal"
+>
+<EditText
+android:id="@+id/etTo"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_alignParentRight="true"
+android:layout_alignParentTop="true"
+android:layout_marginRight="22dp"
+android:layout_marginTop="16dp"
+android:ems="10" />
+<EditText
+android:id="@+id/etSub"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_alignLeft="@+id/etTo"
+android:layout_below="@+id/etTo"
+Arun Shukla
+android:layout_marginTop="18dp"
+android:ems="10" >
+</EditText>
+
+<EditText
+android:id="@+id/etMsg"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_alignLeft="@+id/etSub"
+android:layout_below="@+id/etSub"
+android:layout_marginTop="28dp"
+android:ems="10"
+android:inputType="textMultiLine" />
+<TextView
+android:id="@+id/textView1"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_alignBaseline="@+id/etTo"
+android:layout_alignBottom="@+id/etTo"
+android:layout_alignParentLeft="true"
+android:text="To:" />
+<TextView
+android:id="@+id/textView2"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_alignBaseline="@+id/etSub"
+android:layout_alignBottom="@+id/etSub"
+android:layout_alignParentLeft="true"
+android:text="Subject:" />
+<TextView
+android:id="@+id/textView3"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_alignBaseline="@+id/etMsg"
+android:layout_alignBottom="@+id/etMsg"
+android:layout_alignParentLeft="true"
+android:text="Message:" />
+<Button
+android:id="@+id/btSend"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_alignLeft="@+id/etMsg"
+android:layout_below="@+id/etMsg"
+android:layout_marginLeft="76dp"
+android:layout_marginTop="20dp"
+android:text="Send" />
+</RelativeLayout>
+Step 3 – Send Email Android App Java Code
+
+This is our main part where we will write the code for our app. We discussed in the introduction that we
+will be using intent to send an email. Intent uses the email service which will call the email client and send
+our app data from string to the email client and email client will use that data to send the email. It’s simple
+and easy to do. :)
+Just copy the below java code and paste it to MainActivity.java.
+MainActivity.java
+package in.amitsin6h.sendemail;
+importimportimportimportimportimportandroid.content.Intent;
+android.support.v7.app.AppCompatActivity;
+android.os.Bundle;
+android.view.View;
+android.widget.Button;
+android.widget.EditText;
+public class MainActivity extends AppCompatActivity {
+EditText etTo, etSub, etMsg;
+Button btSend;
+String to, subject, message;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+etTo = (EditText) findViewById(R.id.etTo);
+etSub = (EditText) findViewById(R.id.etSub);
+etMsg = (EditText) findViewById(R.id.etMsg);
+btSend = (Button) findViewById(R.id.btSend);
+btSend.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View view) {
+to = etTo.getText().toString();
+subject = etSub.getText().toString();
+message = etMsg.getText().toString();
+Intent email = new Intent(Intent.ACTION_SEND);
+email.putExtra(Intent.EXTRA_EMAIL, new String[]{ to});
+email.putExtra(Intent.EXTRA_SUBJECT, subject);
+email.putExtra(Intent.EXTRA_TEXT, message);
+//need this to prompts email client only
+email.setType("message/rfc822");
+startActivity(Intent.createChooser(email, "Choose Email client :"));
+}
+});
+}
+
+}
+If anyone faces a problem in understanding the java code, they can comment below and I will help you
+guys to understand.
+Step 4 - Compile and Run
+Now, we are ready to compile and run our Send Email Android app. The following screen will appear once
+our app gets installed.
+Now, let us write and test the email and press the Send button to check whether it works or not. So, once we
+click the Send button, it will ask to choose the email client and then choose your email client and after
+sending the email check your inbox.

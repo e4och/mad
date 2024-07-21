@@ -1,0 +1,157 @@
+10. Create an application to send SMS and receive SMS.
+How to Send SMS in Android?
+Now we will implement SMS in our application and see how it works:
+Step 1: First of all as always, we will create a new project and we will name it.layout in Activity_main.xml as follows:
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".MainActivity">
+<RelativeLayout
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".MainActivity">
+<TextView
+android:id="@+id/textView2"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_centerHorizontal="true"
+android:layout_marginLeft="100dp"
+android:layout_marginTop="100dp"
+android:fontFamily="@font/arbutus"
+android:text="DataFlair "
+android:textColor="@color/colorPrimaryDark"
+android:textSize="50dp" />
+<TextView
+android:id="@+id/textView1"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_alignParentTop="true"
+
+
+
+android:layout_marginLeft="110dp"
+android:layout_marginTop="184dp"
+android:fontFamily="@font/arbutus"
+android:text="SMS Service"
+android:textColor="#EE47ADDD"
+android:textSize="30dp" />
+<EditText
+android:id="@+id/editText"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_marginLeft="100dp"
+android:layout_marginTop="270dp"
+android:hint=" Please Enter Phone Number"
+android:textColorHint="#9FAEE9" />
+<EditText
+android:id="@+id/editText2"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_below="@+id/editText"
+android:layout_marginStart="100dp"
+android:layout_marginLeft="100dp"
+android:layout_marginTop="45dp"
+android:hint="Please write the message "
+android:textColorHint="#CE9C9C" />
+<Button
+android:id="@+id/btnSendSMS"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_below="@+id/editText2"
+android:layout_centerHorizontal="true"
+
+android:layout_marginTop="48dp"
+android:text="Send Sms" />
+</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+Step 2: Now we will write the code for MainActivity.java file as follows:
+package com.DataFlair.smssample;
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+public class MainActivity extends Activity {
+private static final int PERMISSION_RQST_SEND = 0;
+Button button1;
+EditText phoneNo;
+EditText myMessage;
+String phoneNo;
+String message;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+//We’ll create objects
+button1 = (Button) findViewById(R.id.btnSendSMS);
+phoneNo = (EditText) findViewById(R.id.editText);
+myMessage = (EditText) findViewById(R.id.editText2);
+button1.setOnClickListener(new View.OnClickListener() {
+public void onClick(View view) {
+sendSMSMessage();
+}});}
+protected void sendSMSMessage() {
+phoneNo = phoneNo.getText().toString(); //we’ll get the phone number from the user
+message = myMessage.getText().toString();//we’ll get the Message from the user
+//We’ll check the permission is granted or not . If not we’ll change
+if (ContextCompat.checkSelfPermission(this,Manifest.permission.SEND_SMS) !=
+PackageManager.PERMISSION_GRANTED) {
+if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.SEND_SMS)) {
+}
+else { ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS},
+PERMISSION_RQST_SEND);
+}}}
+//Now once the permission is there or not would be checked
+@Override
+public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+switch (requestCode) {
+case PERMISSION_RQST_SEND: {
+if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+SmsManager smsManager = SmsManager.getDefault();
+smsManager.sendTextMessage(phoneNo, null, message, null, null);
+Toast.makeText(getApplicationContext(), "SMS sent.",Toast.LENGTH_LONG).show();
+} else {Toast.makeText(getApplicationContext(), "SMS failed, you may try again later.",
+Toast.LENGTH_LONG).show();
+return;
+}}}}}
+Step 3: Now we will update the manifest.xml file as follows:
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+package="com.DataFlair.smssample">
+<uses-permission android:name="android.permission.SEND_SMS" />
+<application
+android:allowBackup="true"
+android:icon="@mipmap/ic_launcher"
+android:label="@string/app_name"
+android:roundIcon="@mipmap/ic_launcher_round"
+android:supportsRtl="true"
+android:theme="@style/AppTheme">
+<activity
+android:name="com.DataFlair.smssample.MainActivity"
+android:label="@string/app_name">
+<intent-filter>
+<action android:name="android.intent.action.MAIN" />
+<category android:name="android.intent.category.LAUNCHER" />
+</intent-filter>
+</activity>
+<meta-data
+android:name="preloaded_fonts"
+android:resource="@array/preloaded_fonts" />
+</application>
+</manifest>
+Step 4: After this, we will now implement our application as follows:
+i) Our application would look like this.
+ii) Now, we will enter the number and the message.
+iii) After entering the number and message, we will grant permission to accessiv) After that, you will see that the message has been sent.
+our messages.
